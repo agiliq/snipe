@@ -18,6 +18,6 @@ I remember the good days of skitch (before it was acquired by evernote, and turn
 2. Editing has too many menu choices
 3. Upload ui has too many choices, doesn't integrate with dropbox.
 
-`snipe` hopes to make a more usabel screenshot tool.
+`snipe` hopes to make a more usable screenshot tool.
 
 
