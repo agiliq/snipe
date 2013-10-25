@@ -54,9 +54,10 @@ class SnipeApp(QtGui.QWidget):
         arrow = QtGui.QPixmap(":/images/arrow.svg")
         rotate = QtGui.QTransform()
         rotate.rotate(-line.angle())
-        arrow = arrow.scaled(ARROW_WIDTH, line.length(), QtCore.Qt.KeepAspectRatio)
         arrow = arrow.transformed(rotate)
-        qpixmappainter.drawPixmap(line.p1(), arrow);
+        source = QtCore.QRectF(0, 0, arrow.width(), arrow.height())
+        dest = QtCore.QRectF(line.p1(), line.p2())
+        qpixmappainter.drawPixmap(dest, arrow, source);
         self.lbl.setPixmap(self.pixmap)
 
     def getScreen(self):
