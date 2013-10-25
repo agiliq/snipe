@@ -6,6 +6,8 @@ from PyQt4 import QtGui, QtCore
 
 from snipe import res
 
+ARROW_WIDTH = 100
+
 
 class SnipeApp(QtGui.QWidget):
 
@@ -13,6 +15,7 @@ class SnipeApp(QtGui.QWidget):
         super(SnipeApp, self).__init__()
 
         self.pixmap = None
+        self.arrowStart = self.arrowEnd = 0
         self.initUI()
 
     def initUI(self):
@@ -34,18 +37,26 @@ class SnipeApp(QtGui.QWidget):
         self.showMaximized()
 
     def mousePressEvent(self, event):
+        self.arrowStart = event.pos()
         print "pressed at %s, %s" % (event.pos().x(), event.pos().y())
 
     def mouseReleaseEvent(self, event):
+        self.arrowEnd = event.pos()
+        line = QtCore.QLineF(self.arrowStart, self.arrowEnd)
+        self.drawArrow(line)
         print "released at %s, %s" % (event.pos().x(), event.pos().y())
 
     def mouseMoveEvent(self, event):
         print "moved at %s, %s" % (event.pos().x(), event.pos().y())
 
-    def drawArrow(self, a, b):
+    def drawArrow(self, line):
         qpixmappainter = QtGui.QPainter(self.pixmap)
         arrow = QtGui.QPixmap(":/images/arrow.svg")
-        qpixmappainter.drawPixmap(a, b, arrow);
+        rotate = QtGui.QTransform()
+        rotate.rotate(-line.angle())
+        arrow = arrow.scaled(ARROW_WIDTH, line.length(), QtCore.Qt.KeepAspectRatio)
+        arrow = arrow.transformed(rotate)
+        qpixmappainter.drawPixmap(line.p1(), arrow);
         self.lbl.setPixmap(self.pixmap)
 
     def getScreen(self):
