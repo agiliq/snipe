@@ -44,20 +44,32 @@ class SnipeApp(QtGui.QWidget):
         self.arrowEnd = event.pos()
         line = QtCore.QLineF(self.arrowStart, self.arrowEnd)
         self.drawArrow(line)
+        text, ok = QtGui.QInputDialog.getText(self, 'Text',
+            'Enter text:')
+
+        if ok:
+            text = str(text)
+            qp = QtGui.QPainter(self.pixmap)
+            qp.setPen(QtCore.Qt.red)
+            qp.setFont(QtGui.QFont('Sans', 30))
+            dest = QtCore.QRectF(line.p2(), QtCore.QPointF(line.p2().x()+100, line.p2().y()+100))
+            qp.drawText(dest, QtCore.Qt.AlignCenter, text)
+            self.lbl.setPixmap(self.pixmap)
         print "released at %s, %s" % (event.pos().x(), event.pos().y())
+
 
     def mouseMoveEvent(self, event):
         print "moved at %s, %s" % (event.pos().x(), event.pos().y())
 
     def drawArrow(self, line):
-        qpixmappainter = QtGui.QPainter(self.pixmap)
+        qp = QtGui.QPainter(self.pixmap)
         arrow = QtGui.QPixmap(":/images/arrow.svg")
         rotate = QtGui.QTransform()
         rotate.rotate(-line.angle())
         arrow = arrow.transformed(rotate)
         source = QtCore.QRectF(0, 0, arrow.width(), arrow.height())
         dest = QtCore.QRectF(line.p1(), line.p2())
-        qpixmappainter.drawPixmap(dest, arrow, source);
+        qp.drawPixmap(dest, arrow, source);
         self.lbl.setPixmap(self.pixmap)
 
     def getScreen(self):
