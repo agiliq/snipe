@@ -20,7 +20,7 @@ class SnipeApp(QtGui.QWidget):
 
     def initUI(self):
 
-        self.resize(1360, 760)
+        self.resize(1360, 768)
 
         hbox = QtGui.QVBoxLayout(self)
         self.pixmap = self.getScreen()
@@ -28,6 +28,10 @@ class SnipeApp(QtGui.QWidget):
 
         self.lbl = QtGui.QLabel(self)
         self.lbl.setPixmap(self.pixmap)
+        self.lbl.setSizePolicy(QtGui.QSizePolicy.Expanding,
+                QtGui.QSizePolicy.Expanding)
+        self.lbl.setAlignment(QtCore.Qt.AlignCenter)
+        self.lbl.setMinimumSize(240, 160)
 
         hbox.addWidget(self.lbl)
         self.setLayout(hbox)
