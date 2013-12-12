@@ -27,3 +27,10 @@ Install:
     git clone https://github.com/agiliq/snipe.git
     pip install -e .
     snipe
+
+
+
+Screenshot
+--------------
+
+![screenshot](./snipe-demo.png?raw=true)
