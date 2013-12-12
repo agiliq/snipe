@@ -22,7 +22,7 @@ class SnipeApp(QtGui.QWidget):
 
         self.resize(1360, 760)
 
-        hbox = QtGui.QHBoxLayout(self)
+        hbox = QtGui.QVBoxLayout(self)
         self.pixmap = self.getScreen()
         self.pixmap = self.pixmap.scaled(self.size(), QtCore.Qt.KeepAspectRatio)
 
@@ -32,10 +32,38 @@ class SnipeApp(QtGui.QWidget):
         hbox.addWidget(self.lbl)
         self.setLayout(hbox)
 
+        self.createButtonsLayout()
+        hbox.addLayout(self.buttonsLayout)
+
         self.move(300, 200)
         self.setWindowTitle('Snipe')
         self.showMaximized()
 
+    def saveScreenshot(self):
+        format = 'png'
+        initialPath = QtCore.QDir.currentPath() + "/untitled." + format
+
+        fileName = QtGui.QFileDialog.getSaveFileName(self, "Save As",
+                initialPath,
+                "%s Files (*.%s);;All Files (*)" % (format.upper(), format))
+        if fileName:
+            self.pixmap.save(fileName, format)
+
+    def createButtonsLayout(self):
+        self.saveScreenshotButton = self.createButton("Save Screenshot",
+                self.saveScreenshot)
+
+        self.quitScreenshotButton = self.createButton("Quit", self.close)
+
+        self.buttonsLayout = QtGui.QHBoxLayout()
+        self.buttonsLayout.addStretch()
+        self.buttonsLayout.addWidget(self.saveScreenshotButton)
+        self.buttonsLayout.addWidget(self.quitScreenshotButton)
+
+    def createButton(self, text, member):
+        button = QtGui.QPushButton(text)
+        button.clicked.connect(member)
+        return button
     def mousePressEvent(self, event):
         self.arrowStart = event.pos()
         print "pressed at %s, %s" % (event.pos().x(), event.pos().y())
